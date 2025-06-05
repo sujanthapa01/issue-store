@@ -34,6 +34,11 @@ export default function AuthCallback() {
           }
 
           router.push(`/dashboard?username=${encodeURIComponent(githubUsername || session.user.id)}`)
+          localStorage.setItem('avatar_url', session.user.user_metadata.avatar_url)
+          const email: string | undefined = session.user.email
+          if (email) {
+            localStorage.setItem('email', email)
+          }
         } else {
           router.push('/auth')
         }
