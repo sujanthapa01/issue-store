@@ -22,15 +22,18 @@ const formSchema = z.object({
 
 function SaveUsername({ username }: { username: string }) {
     const [email, setEmail] = useState<string>('')
+    const [auth_id, setAuthId] = useState<string | null>(null)
     const [error, setError] = useState<string | null>('')
     const [loading, setLoading] = useState<Boolean>(false)
 
     useEffect(() => {
+        const auth_id = localStorage.getItem('auth_id')
+        setAuthId(auth_id)
         const emailFromlocalStorage: string | null = localStorage.getItem('email')
         if (emailFromlocalStorage) {
             setEmail(emailFromlocalStorage)
         }
-    },[])
+    }, [])
 
 
     const hanldesaveUser = async (e: FormEvent) => {
@@ -47,7 +50,7 @@ function SaveUsername({ username }: { username: string }) {
 
         try {
             const avatar = localStorage.getItem('avatar_url')
-            const res = await axios.post('/api/user/create', { username, email, avatar }, {
+            const res = await axios.post('/api/user/create', { username, email, avatar, auth_id }, {
                 validateStatus: () => true
             })
 
@@ -81,7 +84,7 @@ function SaveUsername({ username }: { username: string }) {
                         <Input id="email" name="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} />
                     </div>
 
-                    <Button type="submit" className="w-full cursor-pointer">{loading ? <Spinner width="32" height="32"/> : 'save'}</Button>
+                    <Button type="submit" className="w-full cursor-pointer">{loading ? <Spinner width="32" height="32" /> : 'save'}</Button>
                 </form>
             </CardContent>
         </Card>
