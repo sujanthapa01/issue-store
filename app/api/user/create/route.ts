@@ -4,16 +4,18 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
 
     try {
-        const { username, email, avatar } = await req.json()
+        const { username, email, avatar,auth_id } = await req.json()
+        console.log(username, email, avatar, auth_id)
         if (!username || !email)
             return NextResponse.json({ ok: false, msg: 'username or email is missing' }, { status: 404 })
 
-        const user = await prisma.user.create({
+        await prisma.user.create({
             data: {
                 username,
                 email,
-                avatar: avatar ? avatar : ""
-
+                avatar: avatar ? avatar : "",
+                auth_id 
+              
             }
         })
 
