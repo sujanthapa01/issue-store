@@ -1,46 +1,63 @@
 'use client'
 
-import { supabase } from '@/supabase/supabaseClient'
-import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/supabase/supabaseClient'
+import axios from 'axios'
 
 export default function AuthCallback() {
   const router = useRouter()
 
   useEffect(() => {
-    const getUserAndRedirect = async () => {
+    async function getUserAndRedirect() {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession()
+        // Get the current Supabase session
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
 
-        if (error) {
-          console.error('Session error:', error)
-          router.push('/auth')
-          return
+        if (sessionError || !session) {
+          console.error('Session error:', sessionError)
+          return router.push('/auth')
         }
 
-        if (session?.user) {
-          let githubUsername = ''
+        const user = session.user // Supabase Auth user info
+        const token = session.provider_token // GitHub OAuth token
+        let githubUsername = ''
 
-          if (session.provider_token) {
-            const res = await fetch('https://api.github.com/user', {
-              headers: {
-                Authorization: `token ${session.provider_token}`
-              }
-            })
-            if (res.ok) {
-              const profile = await res.json()
-              githubUsername = profile.login
-            }
-          }
+        // Fetch GitHub username if token exists
+        if (token) {
+          const ghRes = await fetch('https://api.github.com/user', {
+            headers: { Authorization: `token ${token}` }
+          })
 
-          router.push(`/dashboard?username=${encodeURIComponent(githubUsername || session.user.id)}`)
-          localStorage.setItem('avatar_url', session.user.user_metadata.avatar_url)
-          const email: string | undefined = session.user.email
-          if (email) {
-            localStorage.setItem('email', email)
+          if (ghRes.ok) {
+            const profile = await ghRes.json()
+            githubUsername = profile.login || ''
+          } else {
+            console.error('GitHub API error:', await ghRes.text())
           }
+        }
+
+        // Call API to check if user exists in your database
+        const res = await axios.post('/api/user/check', {
+          username: githubUsername
+        })
+
+        // Save useful info in localStorage
+        if (user) {
+          console.log(user.id)
+          localStorage.setItem('auth_id', user.id || '') // Supabase Auth UUID 
+          localStorage.setItem('avatar_url', user.user_metadata?.avatar_url || '')
+          if (user.email) localStorage.setItem('email', user.email)
+          if (githubUsername) localStorage.setItem('github_username', githubUsername)
+        }
+
+        // Redirect based on user presence in DB
+        if (res?.data?.userFound === true) {
+          router.push('/main')
         } else {
-          router.push('/auth')
+          // Fallback to GitHub username or Supabase UUID as username query param
+          const fallbackUsername = githubUsername || user.id
+          router.push(`/dashboard?username=${encodeURIComponent(fallbackUsername)}`)
         }
       } catch (error) {
         console.error('Unexpected error:', error)
