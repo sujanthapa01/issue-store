@@ -6,17 +6,17 @@ export async function POST(req: NextRequest) {
     try {
 
         const { username } = await req.json()
-
+        console.log(username)
         if (!username)
             return NextResponse.json({ ok: false, msg: 'username is missing' }, { status: 404 })
 
         const user = await prisma.user.findUnique({
-           where : {
-            username
-           }
+            where: {
+                username
+            }
         })
-
-        return NextResponse.json({ userFound: true, user }, { status: 200 }) 
+        const userFound = !!user
+        return NextResponse.json({ userFound, user }, { status: 200 })
 
     } catch (error: any) {
 
