@@ -18,6 +18,15 @@ export default function AuthCallback() {
           console.error('Session error:', sessionError)
           return router.push('/auth')
         }
+         // Send session tokens to the server to be stored in cookies
+      await fetch('/api/set-auth-cookie', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+        }),
+      })
 
         const user = session.user // Supabase Auth user info
         const token = session.provider_token // GitHub OAuth token
@@ -41,7 +50,6 @@ export default function AuthCallback() {
         const res = await axios.post('/api/user/check', {
           username: githubUsername
         })
-
         // Save useful info in localStorage
         if (user) {
           console.log(user.id)
