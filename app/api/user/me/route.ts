@@ -5,7 +5,7 @@ import redis from '@/lib/redis';
 export async function POST(req: NextRequest) {
     try {
         const { username } = await req.json();
-        console.log("[API] api/user/me", username)
+        console.log("[API] api/user/me : ", username)
         if (!username) {
             return NextResponse.json({ ok: false, msg: "userAuthId is missing" }, { status: 404 })
         }
@@ -21,6 +21,9 @@ export async function POST(req: NextRequest) {
             where: {username: username}
         })
 
+        if(!user){
+        return NextResponse.json({ ok: false, userFound : false }, { status: 200 })
+        }
         redis.set(`user:${username}`, user, {'ex':  86400 })
 
         return NextResponse.json({ ok: true, user: user }, { status: 200 })
