@@ -5,7 +5,6 @@ export async function POST(req: NextRequest) {
     try {
         const { email } = await req.json();
 
-
         if (!email) {
             return NextResponse.json({ ok: false, msg: "userAuthId is missing" }, { status: 404 })
         }
