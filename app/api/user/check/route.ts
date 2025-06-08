@@ -16,7 +16,8 @@ export async function POST(req: NextRequest) {
             }
         })
         const userFound = !!user
-        return NextResponse.json({ userFound, user }, { status: 200 })
+        console.log(userFound)
+        return NextResponse.json({ userFound }, { status: 200 })
 
     } catch (error: any) {
 
