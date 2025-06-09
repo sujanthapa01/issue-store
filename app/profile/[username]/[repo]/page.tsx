@@ -92,57 +92,56 @@ export default function RepoPage() {
                     <p className='text-sm text-gray-500'>No open issues found.</p>
                 )}
 
-             <ul className="space-y-3">
-  {issues.map((issue) => (
-    <li
-      key={issue.id}
-      className="border border-gray-200 p-3 rounded-md flex justify-between items-start"
-    >
-      {/* Left side: Issue content */}
-      <div className="flex-1">
-        <a
-          href={issue.html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-medium text-blue-600 hover:underline"
-        >
-          #{issue.number} - {issue.title}
-        </a>
+                <ul className="space-y-3">
+                    {issues.map((issue) => (
+                        <li
+                            key={issue.id}
+                            className="border border-gray-200 p-3 rounded-md flex justify-between items-start"
+                        >
+                            \
+                            <div className="flex-1">
+                                <a
+                                    href={issue.html_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-medium text-blue-600 hover:underline"
+                                >
+                                    #{issue.number} - {issue.title}
+                                </a>
 
-        <div className="text-xs text-gray-500 mt-1">
-          By {issue.user.login} •{" "}
-          {new Date(issue.created_at).toLocaleDateString()}
-        </div>
+                                <div className="text-xs text-gray-500 mt-1">
+                                    By {issue.user.login} •{" "}
+                                    {new Date(issue.created_at).toLocaleDateString()}
+                                </div>
 
-        {issue.labels.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-2">
-            {issue.labels.map((label: any) => (
-              <span
-                key={label.id}
-                className="text-xs px-2 py-0.5 rounded-full text-white"
-                style={{ backgroundColor: `#${label.color}` }}
-              >
-                {label.name}
-              </span>
-            ))}
-          </div>
-        )}
+                                {issue.labels.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        {issue.labels.map((label: any) => (
+                                            <span
+                                                key={label.id}
+                                                className="text-xs px-2 py-0.5 rounded-full text-white"
+                                                style={{ backgroundColor: `#${label.color}` }}
+                                            >
+                                                {label.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
 
-        {issue.body && (
-          <p className="text-xs text-gray-600 mt-2">
-            {issue.body.slice(0, 150)}
-            {issue.body.length > 150 && "..."}
-          </p>
-        )}
-      </div>
+                                {issue.body && (
+                                    <p className="text-xs text-gray-600 mt-2">
+                                        {issue.body.slice(0, 150)}
+                                        {issue.body.length > 150 && "..."}
+                                    </p>
+                                )}
+                            </div>
 
-      <div className="ml-4 text-xs text-gray-500 shrink-0 whitespace-nowrap">
-        💬 {issue.comments} comment{issue.comments !== 1 && "s"}
-      </div>
-    </li>
-  ))}
-</ul>
-
+                            <div className="ml-4 text-xs text-gray-500 shrink-0 whitespace-nowrap">
+                                💬 {issue.comments} comment{issue.comments !== 1 && "s"}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     )
