@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
         const { username } = await req.json();
         console.log("[API] api/user/me : ", username)
         if (!username) {
+            console.log("username is missing : ", username)
             return NextResponse.json({ ok: false, msg: "userAuthId is missing" }, { status: 404 })
         }
 
