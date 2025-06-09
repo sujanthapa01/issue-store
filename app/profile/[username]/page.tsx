@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'next/navigation'
-
+import Repos from '@/components/repos/page'
 const Page = () => {
   const params = useParams()
   const usernameParam = params.username || ''
@@ -44,7 +44,7 @@ const Page = () => {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen text-black flex-col">
+    <div className="flex justify-center items-center h-auto text-black flex-col">
       <div className="flex flex-col justify-center items-center gap-[.5rem]">
         <img src={avatar_url || undefined} alt="avatar" className="h-[200px] w-[200px] rounded-xl" />
         <p className="text-2xl">{username}</p>
@@ -52,6 +52,12 @@ const Page = () => {
       <div className="flex flex-col mt-18">
         <p>Email - {email}</p>
       </div>
+
+
+      <section className='mt-12 border-1 border-black'>
+        <Repos username={username}></Repos>
+      </section>
+
     </div>
   )
 }
