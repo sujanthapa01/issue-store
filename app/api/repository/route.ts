@@ -1,39 +1,66 @@
 import { prisma } from '@/lib/prismaClient'
 import { NextRequest, NextResponse } from 'next/server'
 
+type Repo = {
+  id: string | number
+  name: string
+  owner: string
+  fullName: string
+  url: string
+  description?: string
+  isPrivate?: boolean
+  username: string
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const data = await req.json()
+    const repo: Repo = await req.json()
 
-    if (!data || !Array.isArray(data) || !data.length) {
-      return NextResponse.json({ ok: false, msg: 'Invalid or missing repository data' }, { status: 400 })
+    // Validate required fields
+    const requiredFields: (keyof Repo)[] = ['id', 'name', 'owner', 'fullName', 'url', 'username']
+    for (const field of requiredFields) {
+      if (
+        repo[field] === undefined ||
+        repo[field] === null ||
+        (typeof repo[field] === 'string' && repo[field].trim() === '')
+      ) {
+        return NextResponse.json({ ok: false, msg: `Missing or empty field: ${field}` }, { status: 400 })
+      }
     }
 
-    const formattedData = data.map((repo: any) => {
-      if (!repo.userId) throw new Error('Missing userId in repository data')
+    // Check if user exists
+    const userExists = await prisma.user.findUnique({
+      where: { username: repo.username }
+    })
 
-      return {
-        id: repo.id?.toString() ?? undefined,
+    if (!userExists) {
+      return NextResponse.json({ ok: false, msg: `User with id '${repo.username}' does not exist` }, { status: 404 })
+    }
+
+    
+    const response = await prisma.repository.create({
+      data: {
+        id: repo.id.toString(),
         name: repo.name,
         owner: repo.owner,
         fullName: repo.fullName,
         url: repo.url,
-        description: repo.description || null,
-        isPrivate: repo.isPrivate,
-        userId: repo.userId,
+        description: repo.description ?? null,
+        isPrivate: repo.isPrivate ?? false,
+        user: {
+          connect: {
+            username: repo.username
+          }
+        }
       }
     })
 
- 
-    const response = await prisma.repository.createMany({
-      data: formattedData,
-      skipDuplicates: true,
-    })
 
-    return NextResponse.json({ ok: true, count: response.count }, { status: 201 })
+    return NextResponse.json({ ok: true, repo: response }, { status: 201 })
 
   } catch (error) {
-    console.error('Error inserting repositories:', error)
-    return NextResponse.json({ ok: false, msg: 'Internal Server Error' }, { status: 500 })
+    const msg = error instanceof Error ? error.message : 'Internal Server Error'
+
+    return NextResponse.json({ ok: false, msg }, { status: 500 })
   }
 }
