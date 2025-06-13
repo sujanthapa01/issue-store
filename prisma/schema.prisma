@@ -11,32 +11,53 @@ datasource db {
 }
 
 model User {
-  id        String @id @default(cuid())
-  username  String   @unique
+  id        String       @id @default(cuid())
+  username  String       @unique
   avatar    String
-  private   Boolean  @default(false)
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  auth_id   String   @db.Uuid
-  users     users    @relation(fields: [auth_id], references: [id], onDelete: Cascade)
+  private   Boolean      @default(false)
+  email     String       @unique
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  auth_id   String       @db.Uuid
+  repos     Repository[] @relation("UserRepositories")
+  users     users        @relation(fields: [auth_id], references: [id], onDelete: Cascade)
 
   @@schema("public")
 }
 
+model Repository {
+  id          String   @id @default(uuid())
+  name        String
+  owner       String
+  fullName    String   @unique
+  url         String
+  description String?
+  isPrivate   Boolean
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
 
+  username    String
+  user        User     @relation("UserRepositories", fields: [username], references: [username])
+  issues      Issue[]
 
+  @@schema("public")
+}
 
+model Issue {
+  id        String   @id @default(uuid())
+  title     String
+  body      String?
+  state     String
+  number    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  repositoryId String
+  repository   Repository @relation(fields: [repositoryId], references: [id])
 
-
-
-
-
-
-
-
+  @@schema("public")
+}
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
