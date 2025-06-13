@@ -1,81 +1,98 @@
 'use client'
 
 import axios from 'axios'
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { use, useState } from 'react'
 
 type Props = {
   username: string | null
 }
 
 const Page: React.FC<Props> = ({ username }) => {
-  const [repos, setRepos] = useState<any[]>([])
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [repoLink, setRepoLink] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState<string | null>(null)
 
-  const router = useRouter()
+  const handleAddRepository = async () => {
+    setStatus(null)
 
-  const fetchRepos = async () => {
     if (!username) {
-      setError('Username is missing')
+      setStatus('❌ Username not found.')
+      return
+    }
+
+
+    let cleanedLink = repoLink.trim()
+
+    // Remove trailing slash or .git extension
+    if (cleanedLink.endsWith('/')) cleanedLink = cleanedLink.slice(0, -1)
+    if (cleanedLink.endsWith('.git')) cleanedLink = cleanedLink.slice(0, -4)
+
+    const match = cleanedLink.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)$/)
+    if (!match) {
+      setStatus('❌ Invalid GitHub repo link.')
+      return
+    }
+
+    const owner = match[1]
+    const repoName = match[2]
+
+    if (owner.toLowerCase() !== username.toLowerCase()) {
+      setStatus('❌ You can only add repositories you own.')
       return
     }
 
     setLoading(true)
-    setError(null)
-
     try {
-      const res = await axios.get(`https://api.github.com/users/${username}/repos`)
-      const originalRepos = res.data.filter((repo: any) => !repo.fork)
-      setRepos(originalRepos)
-    } catch (err) {
-      setError('Failed fetching repos')
+      const { data } = await axios.get(`https://api.github.com/repos/${owner}/${repoName}`)
+
+      if (data.fork) {
+        setStatus('❌ Forked repositories are not allowed.')
+        return
+      }
+
+      const payload = {
+        id: data.id.toString(),
+        name: data.name,
+        owner: data.owner.login,
+        fullName: data.full_name,
+        url: data.html_url,
+        description: data.description,
+        isPrivate: data.private,
+        username: owner,
+      }
+
+      await axios.post('/api/repository', payload)
+      setStatus('✅ Repository added successfully!')
+      setRepoLink('') 
+    } catch (error: any) {
+      console.error(error)
+      setStatus('❌ Failed to fetch or save repository.')
     } finally {
       setLoading(false)
     }
   }
 
-  const checkRepo = (repoName: string) => {
-    router.push(`/profile/${username}/${repoName}`)
-  }
-
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-4">🔍 GitHub Repositories</h2>
+    <div className="max-w-xl mx-auto px-4 py-10">
+      <h2 className="text-2xl font-bold mb-4">📦 Add Your GitHub Repository</h2>
+
+      <input
+        type="text"
+        value={repoLink}
+        onChange={(e) => setRepoLink(e.target.value)}
+        placeholder="https://github.com/your-username/your-repo or .git"
+        className="w-full px-4 py-2 border border-gray-300 rounded mb-4"
+      />
 
       <button
-        onClick={fetchRepos}
+        onClick={handleAddRepository}
         disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition"
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
       >
-        {loading ? 'Fetching Repos...' : 'Fetch Repositories'}
+        {loading ? 'Adding...' : 'Add Repository'}
       </button>
 
-      {error && <p className="text-red-600 mt-4">{error}</p>}
-
-      <div className="mt-6 grid gap-4">
-        {repos.map((repo) => (
-          <div
-            key={repo.id}
-            className="border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition"
-          >
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-lg font-semibold text-blue-700">{repo.name}</p>
-                <p className="text-sm text-gray-500">
-                  🐛 Open Issues: {repo.open_issues_count}
-                </p>
-              </div>
-              <button
-                onClick={() => checkRepo(repo.name)}
-                className="bg-gray-100 text-sm px-3 py-1 rounded hover:bg-gray-200 transition"
-              >
-                Go →
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+      {status && <p className="mt-4 text-sm">{status}</p>}
     </div>
   )
 }
