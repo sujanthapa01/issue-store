@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
   try {
     const repo: Repo = await req.json()
 
-    // Validate required fields
     const requiredFields: (keyof Repo)[] = ['id', 'name', 'owner', 'fullName', 'url', 'username']
     for (const field of requiredFields) {
       if (
@@ -28,7 +27,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Check if user exists
     const userExists = await prisma.user.findUnique({
       where: { username: repo.username }
     })
@@ -37,7 +35,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, msg: `User with id '${repo.username}' does not exist` }, { status: 404 })
     }
 
-    
     const response = await prisma.repository.create({
       data: {
         id: repo.id.toString(),
@@ -55,12 +52,10 @@ export async function POST(req: NextRequest) {
       }
     })
 
-
     return NextResponse.json({ ok: true, repo: response }, { status: 201 })
 
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Internal Server Error'
-
     return NextResponse.json({ ok: false, msg }, { status: 500 })
   }
 }

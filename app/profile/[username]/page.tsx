@@ -2,7 +2,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'next/navigation'
-import Repos from '@/components/repos/page'
+import RepositoryPopup from '@/components/repositoryPopup/page'
+import SavedRepositoriesPopup from '@/components/savedRepositories/page'
 const Page = () => {
   const params = useParams()
   const usernameParam = params.username || ''
@@ -55,7 +56,8 @@ const Page = () => {
 
 
       <section className='mt-12 border-1 border-black'>
-        <Repos username={username}></Repos>
+        <RepositoryPopup username={username}></RepositoryPopup>
+        <SavedRepositoriesPopup></SavedRepositoriesPopup>
       </section>
 
     </div>
