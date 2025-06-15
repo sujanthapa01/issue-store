@@ -27,12 +27,21 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    //If user exist then save the repo
     const userExists = await prisma.user.findUnique({
       where: { username: repo.username }
     })
-
+    
     if (!userExists) {
       return NextResponse.json({ ok: false, msg: `User with id '${repo.username}' does not exist` }, { status: 404 })
+    }
+    // check repo exist or not
+      const repoExists = await prisma.repository.findUnique({
+      where: { id: repo.id.toString(), fullName: repo.fullName }
+    })
+    
+    if(repoExists){
+      return NextResponse.json({ok:false, msg: `${repo.name} already exist`})
     }
 
     const response = await prisma.repository.create({
