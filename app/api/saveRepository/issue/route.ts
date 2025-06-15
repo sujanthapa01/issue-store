@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 
     if(issueExists) {
       console.warn(`Issue with number ${number} already exists in repository ${repositoryId}`)
-      return NextResponse.json({ ok: false, msg: 'Issue already exists' }, { status: 409 })
+      return NextResponse.json({ ok: false, msg: `#${number} Issue already exists` }, { status: 409 })
     }
 
     const issue = await prisma.issue.create({
