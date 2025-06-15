@@ -108,7 +108,11 @@ const AddRepositoryPopup: React.FC<Props> = ({ username }) => {
   }
 
   const saveIssue = async (issue: any) => {
-    if (!repoId) return setStatus('❌ Repository ID missing.')
+    if (!repoId) {
+      setStatus('❌ Repository ID missing.')
+      return
+    }
+
     try {
       await axios.post('/api/saveRepository/issue', {
         title: issue.title,
@@ -117,10 +121,12 @@ const AddRepositoryPopup: React.FC<Props> = ({ username }) => {
         number: issue.number,
         repositoryId: repoId,
       })
+
       setStatus(`✅ Issue #${issue.number} saved.`)
-    } catch (err) {
+    } catch (err: any) {
       console.error(err)
-      setStatus(`❌ Failed to save issue #${issue.number}.`)
+      const backendMessage = err.response?.data?.msg || `❌ Failed to save issue #${issue.number}.`
+      setStatus(backendMessage)
     }
   }
 
