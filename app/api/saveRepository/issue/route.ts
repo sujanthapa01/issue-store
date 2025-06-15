@@ -9,12 +9,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, msg: 'Missing required fields' }, { status: 400 })
     }
 
+    // check if repository exists
     const repo = await prisma.repository.findUnique({
       where: { id: repositoryId },
     })
 
     if (!repo) {
       return NextResponse.json({ ok: false, msg: 'Repository not found' }, { status: 404 })
+    }
+
+    const issueExists = await prisma.issue.findFirst({
+      where: {
+        number: number,
+        repositoryId: repositoryId
+      }
+    })
+
+    if(issueExists) {
+      console.warn(`Issue with number ${number} already exists in repository ${repositoryId}`)
+      return NextResponse.json({ ok: false, msg: 'Issue already exists' }, { status: 409 })
     }
 
     const issue = await prisma.issue.create({
