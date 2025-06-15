@@ -86,7 +86,7 @@ const AddRepositoryPopup: React.FC<Props> = ({ username }) => {
   const handleSaveRepository = async () => {
     if (!repoData) return
     try {
-      await axios.post('/api/repository', repoData)
+      await axios.post('/api/saveRepository', repoData)
       setStatus('✅ Repository saved successfully!')
       setRepoId(repoData.id)
       await fetchIssues(repoData.owner, repoData.name)
@@ -110,7 +110,7 @@ const AddRepositoryPopup: React.FC<Props> = ({ username }) => {
   const saveIssue = async (issue: any) => {
     if (!repoId) return setStatus('❌ Repository ID missing.')
     try {
-      await axios.post('/api/repository/issue', {
+      await axios.post('/api/saveRepository/issue', {
         title: issue.title,
         body: issue.body,
         state: issue.state,
