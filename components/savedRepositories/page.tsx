@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { Switch } from '@/components/ui/switch' 
 
 type Repository = {
   id: string
@@ -31,7 +32,6 @@ const SavedRepositoriesPopup = () => {
     setRepos([])
     const username = localStorage.getItem('github_username')
 
-    console.log(username)
     try {
       const { data } = await axios.get('/api/getRepository', {
         params: { username },
@@ -50,6 +50,24 @@ const SavedRepositoriesPopup = () => {
     if (open) fetchAllData()
   }, [open])
 
+  const togglePrivacy = async (id: string, currentState: boolean) => {
+    try {
+      await axios.post('/api/updateRepositoryPrivacy', {
+        id,
+        isPrivate: !currentState,
+      })
+      setRepos((prev) =>
+        prev.map((repo) =>
+          repo.id === id ? { ...repo, isPrivate: !currentState } : repo
+        )
+      )
+      setStatus('✅ Updated repository privacy.')
+    } catch (err) {
+      console.error(err)
+      setStatus('❌ Failed to update privacy.')
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -58,7 +76,11 @@ const SavedRepositoriesPopup = () => {
         </div>
       </DialogTrigger>
 
-      <DialogContent className="max-h-screen overflow-y-auto max-w-3xl">
+      <DialogContent
+        className="max-h-screen overflow-y-auto max-w-3xl"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>📦 Your Repositories</DialogTitle>
         </DialogHeader>
@@ -70,13 +92,31 @@ const SavedRepositoriesPopup = () => {
           <p className="text-gray-500">No repositories saved yet.</p>
         ) : (
           repos.map((repo) => (
-            <div key={repo.id} className="border rounded p-4 mb-6 bg-white shadow-sm">
+            <div
+              key={repo.id}
+              className="border rounded p-4 mb-6 bg-white shadow-sm"
+            >
               <h3 className="text-lg font-semibold">{repo.fullName}</h3>
-              <p className="text-sm text-gray-700">{repo.description || 'No description'}</p>
-              <a href={repo.url} target="_blank" className="text-xs text-blue-600 block mt-1">
+              <p className="text-sm text-gray-700">
+                {repo.description || 'No description'}
+              </p>
+              <a
+                href={repo.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-blue-600 block mt-1"
+              >
                 🔗 {repo.url}
               </a>
-              <p className="text-xs text-gray-500">🔒 {repo.isPrivate ? 'Private' : 'Public'}</p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="text-xs text-gray-500">
+                  🔒 {repo.isPrivate ? 'Private' : 'Public'}
+                </p>
+                <Switch
+                  checked={!repo.isPrivate}
+                  onCheckedChange={() => togglePrivacy(repo.id, repo.isPrivate)}
+                />
+              </div>
             </div>
           ))
         )}
