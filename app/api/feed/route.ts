@@ -6,12 +6,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
     try {
 
-        const user = await prisma.repository.findMany({
+        const feed = await prisma.repository.findMany({
             where: { isPrivate: false },
             orderBy: { createdAt: "desc" },
         })
 
-        return NextResponse.json({ ok: true, user }, { status: 200 })
+        return NextResponse.json({ ok: true, feed }, { status: 200 })
 
 
     } catch (error) {
