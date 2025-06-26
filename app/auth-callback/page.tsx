@@ -64,7 +64,7 @@ export default function AuthCallback() {
 
         if (res?.data?.userFound === true) {
           console.log(true)
-          router.push('/main')
+          router.push('/')
         } else {
           const fallbackUsername = githubUsername as string
           router.push(`/dashboard?username=${encodeURIComponent(fallbackUsername)}`)
