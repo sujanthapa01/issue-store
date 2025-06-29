@@ -37,7 +37,7 @@ function Page() {
     <div>
       {loading && <p>Loading...</p>}
       {error && <p>Error loading feed</p>}
-      <Feed data={data}/>
+      <Feed />
     </div>
   )
 }
