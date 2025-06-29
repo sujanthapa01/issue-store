@@ -1,15 +1,10 @@
-import React from 'react'
+import FeedClient from "@/components/feedClient"
 
-function page({data}:any) {
-    console.log(data)
+export default function FeedPage() {
   return (
-    <div>{data.map((repo:any) => (
-        <div key={repo.id} className="mb-4 p-4 border rounded">
-          <h2 className="text-lg font-semibold">{repo.fullName}</h2>
-          <p className="text-sm text-gray-600">{repo.url}</p>
-        </div>
-      ))}</div>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8 text-center">Find Repositories to Contribute</h1>
+      <FeedClient />
+    </div>
   )
 }
-
-export default page
