@@ -24,7 +24,6 @@ model User {
 
   @@schema("public")
 }
-
 model Repository {
   id          String   @id @default(uuid())
   name        String
@@ -33,9 +32,17 @@ model Repository {
   url         String
   description String?
   isPrivate   Boolean
+
+  homepage    String?          // project website/Vercel URL
+  language    String?          // main language used
+  stars       Int              // stargazers_count
+  watchers    Int              // watchers_count
+  forks       Int              // forks_count
+  topics      String[]         // ["ai", "llm"] 
+  avatarUrl   String?          // owner.avatar_url
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
 
   username    String
   user        User     @relation("UserRepositories", fields: [username], references: [username])
@@ -43,6 +50,7 @@ model Repository {
 
   @@schema("public")
 }
+
 
 model Issue {
   id        String   @id @default(uuid())
