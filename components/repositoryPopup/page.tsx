@@ -54,23 +54,35 @@ const AddRepositoryPopup: React.FC<Props> = ({ username }) => {
 
     setLoading(true)
     try {
-      const { data } = await axios.get(`https://api.github.com/repos/${owner}/${repoName}`)
+      const { data } = await axios.get(`https://api.github.com/repos/${owner}/${repoName}`);
 
       if (data.fork) {
-        setStatus('❌ Forked repositories are not allowed.')
-        return
+        setStatus('❌ Forked repositories are not allowed.');
+        return;
       }
 
       const payload = {
-        id: data.id.toString(),
-        name: data.name,
-        owner: data.owner.login,
-        fullName: data.full_name,
-        url: data.html_url,
-        description: data.description,
-        isPrivate: data.private,
-        username: owner,
-      }
+        id: data.id.toString(),               // GitHub repo ID as string
+        name: data.name,                      // Repository name
+        owner: data.owner.login,             // GitHub username
+        fullName: data.full_name,            // Full name: sujanthapa01/Ai-Assistant-Dronacharya
+        url: data.html_url,                  // GitHub URL
+        description: data.description,       // Description
+        isPrivate: data.private,             // Visibility
+        username: owner,                     // Local username (from app)
+
+        homepage: data.homepage || null,     // Live project site
+        language: data.language || null,     // Primary language (TypeScript, etc.)
+        stars: data.stargazers_count,        // Number of stars
+        watchers: data.watchers_count,       // Watchers
+        forks: data.forks_count,             // Fork count
+        topics: data.topics || [],           // Array of topics (e.g., ['ai', 'llm'])
+        avatarUrl: data.owner.avatar_url,    // Owner's avatar for UI
+
+        createdAt: new Date(data.created_at), // Convert ISO string to Date object
+        updatedAt: new Date(data.updated_at),
+      };
+
 
       setRepoData(payload)
       setStatus('✅ Repository info fetched. Click "Save Repository" to continue.')
