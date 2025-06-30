@@ -11,27 +11,28 @@ datasource db {
 }
 
 model User {
-  id        String       @id @default(cuid())
-  username  String       @unique
-  avatar    String
-  private   Boolean      @default(false)
-  email     String       @unique
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  auth_id   String       @db.Uuid
-  repos     Repository[] @relation("UserRepositories")
-  users     users        @relation(fields: [auth_id], references: [id], onDelete: Cascade)
+  id        String       @id @default(cuid())  
+  username  String       @unique            
+  avatar    String   
+  private   Boolean      @default(false)      
+  email     String       @unique              
+  createdAt DateTime     @default(now())      
+  updatedAt DateTime     @updatedAt           
+  auth_id   String       @db.Uuid            
+  repos     Repository[] @relation("UserRepositories")       
+  users     users        @relation(fields: [auth_id], references: [id], onDelete: Cascade)      
 
   @@schema("public")
 }
+
 model Repository {
-  id          String   @id @default(uuid())
-  name        String
-  owner       String
-  fullName    String   @unique
-  url         String
-  description String?
-  isPrivate   Boolean
+  id          String   @id @default(uuid())  
+  name        String   
+  owner       String  
+  fullName    String   @unique   
+  url         String  
+  description String?   
+  isPrivate   Boolean 
 
   homepage    String?          // project website/Vercel URL
   language    String?          // main language used
@@ -41,10 +42,10 @@ model Repository {
   topics      String[]         // ["ai", "llm"] 
   avatarUrl   String?          // owner.avatar_url
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())  
+  updatedAt   DateTime @updatedAt   
 
-  username    String
+  username    String 
   user        User     @relation("UserRepositories", fields: [username], references: [username])
   issues      Issue[]
 
