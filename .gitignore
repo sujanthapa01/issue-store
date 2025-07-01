@@ -1,44 +1,73 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# -------------------
+# Node.js / Next.js
+# -------------------
+node_modules/
+.next/
+dist/
+.yarn/
+.pnpm-store/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Build output
+apps/web/.next/
+apps/web/out/
+apps/web/.turbo/
+apps/web/node_modules/
+apps/web/.env
+# Environment files
+.env
+.env.local
+.env.*.local
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
+# Log files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# Vercel / Netlify / other deployment
+.vercel/
+.netlify/
+.vscode/
 
-# vercel
-.vercel
+# -------------------
+# Python / FastAPI
+# -------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+.Python
+venv/
+env/
+ENV/
+llm-backend/__pycache__/
+llm-backend/.venv/
+llm-backend/venv/
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# Python logs
+llm-backend/*.log
 
-/app/generated/prisma
-.txt
+# -------------------
+# Docker / OS
+# -------------------
+docker-compose.override.yml
+Dockerfile.dev
+.DS_Store
+Thumbs.db
+
+# -------------------
+# Misc Tools / IDEs
+# -------------------
+.idea/
+*.swp
+*.swo
+*.bak
+
+# -------------------
+# Coverage / testing
+# -------------------
+coverage/
+*.lcov
+.nyc_output/

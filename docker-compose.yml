@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  web:
+    build: ./apps/web
+    ports:
+      - "3000:3000"
+    depends_on:
+      - llm
+
+  llm:
+    build: ./apps/llm-backend
+    ports:
+      - "8000:8000"
