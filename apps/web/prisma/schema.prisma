@@ -7,61 +7,57 @@ datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
-  schemas   = ["public", "auth"]
+  schemas   = ["auth", "public"]
 }
 
 model User {
-  id        String       @id @default(cuid())  
-  username  String       @unique            
-  avatar    String   
-  private   Boolean      @default(false)      
-  email     String       @unique              
-  createdAt DateTime     @default(now())      
-  updatedAt DateTime     @updatedAt           
-  auth_id   String       @db.Uuid            
-  repos     Repository[] @relation("UserRepositories")       
-  users     users        @relation(fields: [auth_id], references: [id], onDelete: Cascade)      
+  username  String       @unique
+  avatar    String
+  private   Boolean      @default(false)
+  email     String       @unique
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  auth_id   String       @db.Uuid
+  id        String       @id @default(cuid())
+  repos     Repository[] @relation("UserRepositories")
+  users     users        @relation(fields: [auth_id], references: [id], onDelete: Cascade)
 
   @@schema("public")
 }
 
 model Repository {
-  id          String   @id @default(uuid())  
-  name        String   
-  owner       String  
-  fullName    String   @unique   
-  url         String  
-  description String?   
-  isPrivate   Boolean 
-
-  homepage    String?          // project website/Vercel URL
-  language    String?          // main language used
-  stars       Int              // stargazers_count
-  watchers    Int              // watchers_count
-  forks       Int              // forks_count
-  topics      String[]         // ["ai", "llm"] 
-  avatarUrl   String?          // owner.avatar_url
-
-  createdAt   DateTime @default(now())  
-  updatedAt   DateTime @updatedAt   
-
-  username    String 
-  user        User     @relation("UserRepositories", fields: [username], references: [username])
+  id          String   @id @default(uuid())
+  name        String
+  owner       String
+  fullName    String   @unique
+  url         String
+  description String?
+  isPrivate   Boolean
+  homepage    String?     
+  language    String?     
+  forks       Int?         
+  stars       Int?         
+  watchers    Int?       
+  topics      String[]    
+  avatarUrl   String?   
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  username    String
   issues      Issue[]
+  user        User     @relation("UserRepositories", fields: [username], references: [username])
 
   @@schema("public")
 }
 
 
 model Issue {
-  id        String   @id @default(uuid())
-  title     String
-  body      String?
-  state     String
-  number    Int     
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id           String     @id @default(uuid())
+  title        String
+  body         String?
+  state        String
+  number       Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   repositoryId String
   repository   Repository @relation(fields: [repositoryId], references: [id])
 
@@ -379,19 +375,10 @@ model users {
   one_time_tokens             one_time_tokens[]
   sessions                    sessions[]
   User                        User[]
-  accounts                    accounts?
 
   @@index([instance_id])
   @@index([is_anonymous])
   @@schema("auth")
-}
-
-model accounts {
-  uid   String @id @db.Uuid
-  email String
-  users users  @relation(fields: [uid], references: [id], onDelete: Cascade)
-
-  @@schema("public")
 }
 
 enum aal_level {

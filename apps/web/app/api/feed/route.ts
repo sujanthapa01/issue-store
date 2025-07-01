@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ ok: true, feed }, { status: 200 })
   } catch (error) {
-  
+  console.log(error)
     return NextResponse.json({ ok: false, msg: "Internal server error" }, { status: 500 })
   }
 }
