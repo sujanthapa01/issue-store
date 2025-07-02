@@ -65,7 +65,7 @@ sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
 ## 🛠 Under Development
 - Feature	Status
 - Monorepo Structure `✅ Complete`
-- FastAPI + Next.js	`✅In Progress`
+- FastAPI + Next.js	`🚧 In Progress`
 - Prisma Integration `✅ Working`
 - LLM Integration	`🚧 In Progress`
 - Production Deployment	`🔜 Coming Soon`
