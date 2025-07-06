@@ -1,72 +1,70 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import {
   Dialog,
   DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Switch } from '@/components/ui/switch' 
+} from '@/components/ui/dialog';
+import { Switch } from '@/components/ui/switch';
 
 type Repository = {
-  id: string
-  name: string
-  fullName: string
-  description: string
-  url: string
-  isPrivate: boolean
-}
+  id: string;
+  name: string;
+  fullName: string;
+  description: string;
+  url: string;
+  isPrivate: boolean;
+};
 
 const SavedRepositoriesPopup = () => {
-  const [open, setOpen] = useState(false)
-  const [repos, setRepos] = useState<Repository[]>([])
-  const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState<string | null>(null)
+  const [open, setOpen] = useState(false);
+  const [repos, setRepos] = useState<Repository[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
 
   const fetchAllData = async () => {
-    setLoading(true)
-    setStatus(null)
-    setRepos([])
-    const username = localStorage.getItem('github_username')
+    setLoading(true);
+    setStatus(null);
+    setRepos([]);
+    const username = localStorage.getItem('github_username');
 
     try {
       const { data } = await axios.get('/api/getRepository', {
         params: { username },
-      })
-      setRepos(data)
-      setStatus('✅ Loaded repositories.')
+      });
+      setRepos(data);
+      setStatus('✅ Loaded repositories.');
     } catch (err) {
-      console.error(err)
-      setStatus('❌ Failed to load repositories.')
+      console.error(err);
+      setStatus('❌ Failed to load repositories.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    if (open) fetchAllData()
-  }, [open])
+    if (open) fetchAllData();
+  }, [open]);
 
   const togglePrivacy = async (id: string, currentState: boolean) => {
     try {
       await axios.post('/api/updateRepositoryPrivacy', {
         id,
         isPrivate: !currentState,
-      })
+      });
       setRepos((prev) =>
-        prev.map((repo) =>
-          repo.id === id ? { ...repo, isPrivate: !currentState } : repo
-        )
-      )
-      setStatus('✅ Updated repository privacy.')
+        prev.map((repo) => (repo.id === id ? { ...repo, isPrivate: !currentState } : repo)),
+      );
+      setStatus('✅ Updated repository privacy.');
     } catch (err) {
-      console.error(err)
-      setStatus('❌ Failed to update privacy.')
+      console.error(err);
+      setStatus('❌ Failed to update privacy.');
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -92,14 +90,9 @@ const SavedRepositoriesPopup = () => {
           <p className="text-gray-500">No repositories saved yet.</p>
         ) : (
           repos.map((repo) => (
-            <div
-              key={repo.id}
-              className="border rounded p-4 mb-6 bg-white shadow-sm"
-            >
+            <div key={repo.id} className="border rounded p-4 mb-6 bg-white shadow-sm">
               <h3 className="text-lg font-semibold">{repo.fullName}</h3>
-              <p className="text-sm text-gray-700">
-                {repo.description || 'No description'}
-              </p>
+              <p className="text-sm text-gray-700">{repo.description || 'No description'}</p>
               <a
                 href={repo.url}
                 target="_blank"
@@ -109,9 +102,7 @@ const SavedRepositoriesPopup = () => {
                 🔗 {repo.url}
               </a>
               <div className="flex items-center justify-between mt-2">
-                <p className="text-xs text-gray-500">
-                  🔒 {repo.isPrivate ? 'Private' : 'Public'}
-                </p>
+                <p className="text-xs text-gray-500">🔒 {repo.isPrivate ? 'Private' : 'Public'}</p>
                 <Switch
                   checked={!repo.isPrivate}
                   onCheckedChange={() => togglePrivacy(repo.id, repo.isPrivate)}
@@ -122,7 +113,7 @@ const SavedRepositoriesPopup = () => {
         )}
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default SavedRepositoriesPopup
+export default SavedRepositoriesPopup;

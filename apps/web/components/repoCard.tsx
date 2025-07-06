@@ -1,34 +1,34 @@
-"use client"
+'use client';
 
-import { formatDistanceToNow } from "date-fns"
+import { formatDistanceToNow } from 'date-fns';
 
 export default function RepoCard({ repo }: { repo: any }) {
-  const issues = repo.issues || []
+  const issues = repo.issues || [];
 
   const bgStyles = [
     {
-      bg: "bg-gradient-to-br from-white via-slate-50 to-blue-50",
-      border: "hover:border-blue-300",
-      button: "bg-blue-100 border-blue-200 text-blue-700",
+      bg: 'bg-gradient-to-br from-white via-slate-50 to-blue-50',
+      border: 'hover:border-blue-300',
+      button: 'bg-blue-100 border-blue-200 text-blue-700',
     },
     {
-      bg: "bg-gradient-to-br from-white via-pink-50 to-rose-50",
-      border: "hover:border-rose-300",
-      button: "bg-rose-100 border-rose-200 text-rose-700",
+      bg: 'bg-gradient-to-br from-white via-pink-50 to-rose-50',
+      border: 'hover:border-rose-300',
+      button: 'bg-rose-100 border-rose-200 text-rose-700',
     },
     {
-      bg: "bg-gradient-to-br from-white via-yellow-50 to-amber-50",
-      border: "hover:border-amber-300",
-      button: "bg-amber-100 border-amber-200 text-amber-700",
+      bg: 'bg-gradient-to-br from-white via-yellow-50 to-amber-50',
+      border: 'hover:border-amber-300',
+      button: 'bg-amber-100 border-amber-200 text-amber-700',
     },
     {
-      bg: "bg-gradient-to-br from-white via-emerald-50 to-green-50",
-      border: "hover:border-green-300",
-      button: "bg-green-100 border-green-200 text-green-700",
+      bg: 'bg-gradient-to-br from-white via-emerald-50 to-green-50',
+      border: 'hover:border-green-300',
+      button: 'bg-green-100 border-green-200 text-green-700',
     },
-  ]
+  ];
 
-  const selectedStyle = bgStyles[Math.floor(Math.random() * bgStyles.length)]
+  const selectedStyle = bgStyles[Math.floor(Math.random() * bgStyles.length)];
 
   return (
     <div
@@ -38,7 +38,7 @@ export default function RepoCard({ repo }: { repo: any }) {
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex items-center gap-4">
           <img
-            src={repo.avatarUrl || repo.user?.avatar || "/default-avatar.png"}
+            src={repo.avatarUrl || repo.user?.avatar || '/default-avatar.png'}
             alt={`${repo.user?.username || repo.owner}'s avatar`}
             className="w-12 h-12 rounded-full border"
           />
@@ -49,37 +49,28 @@ export default function RepoCard({ repo }: { repo: any }) {
         </div>
         <span
           className={`text-xs font-semibold px-2 py-1 rounded ${
-            repo.isPrivate
-              ? "bg-red-100 text-red-700"
-              : "bg-emerald-100 text-emerald-700"
+            repo.isPrivate ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'
           }`}
         >
-          {repo.isPrivate ? "Private" : "Public"}
+          {repo.isPrivate ? 'Private' : 'Public'}
         </span>
       </div>
 
       {/* Description */}
-      <p className="text-sm text-gray-700 mb-4">
-        {repo.description || "No description provided."}
-      </p>
+      <p className="text-sm text-gray-700 mb-4">{repo.description || 'No description provided.'}</p>
 
       {/* Meta info */}
       <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-6 items-center">
         <span className={`${selectedStyle.button} py-1 px-2 rounded-lg border-2`}>
-          🔗{" "}
-          <a
-            href={repo.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
+          🔗{' '}
+          <a href={repo.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
             GitHub
           </a>
         </span>
 
         {repo.homepage && (
           <span>
-            🌐{" "}
+            🌐{' '}
             <a
               href={repo.homepage}
               target="_blank"
@@ -95,7 +86,9 @@ export default function RepoCard({ repo }: { repo: any }) {
         <span>⭐ {repo.stars || 0} Stars</span>
         <span>👁 {repo.watchers || 0} Watchers</span>
         <span>🍴 {repo.forks || 0} Forks</span>
-        <span>🛠 {issues.length} Issue{issues.length !== 1 && "s"}</span>
+        <span>
+          🛠 {issues.length} Issue{issues.length !== 1 && 's'}
+        </span>
         <span>🧭 Updated {formatDistanceToNow(new Date(repo.updatedAt))} ago</span>
       </div>
 
@@ -129,9 +122,9 @@ export default function RepoCard({ repo }: { repo: any }) {
                   <h4 className="text-md font-medium text-gray-800">{issue.title}</h4>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full ${
-                      issue.state === "open"
-                        ? "bg-green-200 text-green-800"
-                        : "bg-gray-300 text-gray-700"
+                      issue.state === 'open'
+                        ? 'bg-green-200 text-green-800'
+                        : 'bg-gray-300 text-gray-700'
                     }`}
                   >
                     {issue.state}
@@ -139,7 +132,7 @@ export default function RepoCard({ repo }: { repo: any }) {
                 </div>
                 <p className="text-xs text-gray-500 mb-2">#{issue.number}</p>
                 <p className="text-sm text-gray-700 mb-3">
-                  {issue.body ? issue.body.slice(0, 200) : "No description"}
+                  {issue.body ? issue.body.slice(0, 200) : 'No description'}
                 </p>
                 <div className="flex items-center justify-between text-xs text-gray-500">
                   <span>🕓 {formatDistanceToNow(new Date(issue.createdAt))} ago</span>
@@ -158,5 +151,5 @@ export default function RepoCard({ repo }: { repo: any }) {
         )}
       </div>
     </div>
-  )
+  );
 }

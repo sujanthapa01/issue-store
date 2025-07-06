@@ -1,25 +1,25 @@
-version: "3.9"
+version: '3.9'
 
 services:
   web:
     build:
       context: ./apps/web
-      dockerfile: Dockerfile.dev    # optional if you're using a dev-specific Dockerfile
+      dockerfile: Dockerfile.dev # optional if you're using a dev-specific Dockerfile
     volumes:
       - ./apps/web:/app
-      - /app/node_modules           # Prevent node_modules conflicts
+      - /app/node_modules # Prevent node_modules conflicts
     command: yarn dev
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - llm
 
   llm:
     build:
       context: ./apps/llm-backend
-      dockerfile: Dockerfile.dev    # optional if you're using a dev-specific Dockerfile
+      dockerfile: Dockerfile.dev # optional if you're using a dev-specific Dockerfile
     volumes:
       - ./apps/llm-backend:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     ports:
-      - "8000:8000"
+      - '8000:8000'

@@ -20,8 +20,6 @@
 
 ## 📁 Project Structure
 
-
-
 ---
 
 ## 🚀 Getting Started
@@ -31,7 +29,9 @@
 ```bash
 docker-compose up --build
 ```
+
 ## 💻 Run Manually
+
 - ### Start backend:
 
 ```bash
@@ -41,7 +41,6 @@ uvicorn main:app --reload --port 8000
 
 - ### Start frontend:
 
-
 ```bash
 cd apps/web
 yarn install
@@ -49,11 +48,13 @@ yarn dev or yarn run dev
 ```
 
 ## ⚙️ Environment Setup
+
 - Each app uses its own `.env` file.
 
 - Use .env.example as reference and keep actual `.env` files out of version control.
 
 ## 🛡 IPv6 Fix for Prisma
+
 > If you use Supabase + Prisma in Docker and face DNS issues:
 
 ```bash
@@ -63,13 +64,15 @@ sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
 ```
 
 ## 🛠 Under Development
-- Feature	Status
+
+- Feature Status
 - Monorepo Structure `✅ Complete`
-- FastAPI + Next.js	`🚧 In Progress`
+- FastAPI + Next.js `🚧 In Progress`
 - Prisma Integration `✅ Working`
-- LLM Integration	`🚧 In Progress`
-- Production Deployment	`🔜 Coming Soon`
+- LLM Integration `🚧 In Progress`
+- Production Deployment `🔜 Coming Soon`
 
 ## 👤 Author
+
 > Made by Sujan Thapa
-MIT License
+> MIT License

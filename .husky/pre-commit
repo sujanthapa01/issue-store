@@ -1,0 +1,12 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "⏳ Running code formatter (yarn format)..."
+yarn format
+
+if [ $? -eq 0 ]; then
+  echo "✅ Code formatting completed successfully."
+else
+  echo "❌ Code formatting failed. Please fix the issues before committing."
+  exit 1
+fi

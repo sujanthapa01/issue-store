@@ -17,9 +17,9 @@
     "clean:node": "rm -rf node_modules apps/web/node_modules",
     "clean:python": "cd apps/llm-backend && rm -rf __pycache__ .pytest_cache && find . -name '*.egg-info' -type d -exec rm -rf {} + 2>/dev/null || true",
     "clean:all": "yarn clean:node && yarn clean:python",
-      "pre-commit-check": "yarn format && yarn test",
-  "format": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pre-commit-check": "yarn format && yarn test",
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "concurrently": "^9.2.0",
