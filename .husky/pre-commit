@@ -3,10 +3,21 @@
 
 echo "⏳ Running code formatter (yarn format)..."
 yarn format
+FORMAT_RESULT=$?
 
-if [ $? -eq 0 ]; then
-  echo "✅ Code formatting completed successfully."
-else
+if [ $FORMAT_RESULT -ne 0 ]; then
   echo "❌ Code formatting failed. Please fix the issues before committing."
   exit 1
 fi
+
+echo "⏳ Running linter (yarn lint)..."
+yarn lint
+LINT_RESULT=$?
+
+if [ $LINT_RESULT -ne 0 ]; then
+  echo "❌ Lint checks failed. Please fix the issues before committing."
+  exit 1
+fi
+
+echo "✅ Code formatting and lint checks completed successfully."
+exit 0
