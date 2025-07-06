@@ -1,0 +1,24 @@
+{
+  "name": "issue-store",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "yarn@4.9.1",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "setup": "yarn install && cd apps/llm-backend && pip3 install -r requirements.txt && cd .. && cd web && yarn install",
+    "dev": "./scripts/dev.sh",
+    "dev:web": "yarn workspace web dev",
+    "dev:api": "cd apps/llm-backend && python3 -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload",
+    "build": "yarn workspace web build",
+    "lint": "yarn workspace web lint",
+    "clean": "yarn workspaces foreach --all run clean && rm -rf node_modules && yarn clean:python",
+    "clean:node": "rm -rf node_modules apps/web/node_modules",
+    "clean:python": "cd apps/llm-backend && rm -rf __pycache__ .pytest_cache && find . -name '*.egg-info' -type d -exec rm -rf {} + 2>/dev/null || true",
+    "clean:all": "yarn clean:node && yarn clean:python"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}
