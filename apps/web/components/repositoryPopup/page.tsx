@@ -8,7 +8,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialo'
+} from '@/components/ui/dialog';
 
 type Props = {
   username: string | null;
