@@ -18,7 +18,9 @@
 
 ---
 
-## 📁 Project Structure
+## 🏛️ Project Architecture
+
+![Project Structure](https://res.cloudinary.com/dmg30zh6b/image/upload/v1751969688/Screenshot_from_2025-07-08_15-43-52_buyico.png)
 
 ---
 
