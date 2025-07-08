@@ -32,19 +32,9 @@ docker-compose up --build
 
 ## 💻 Run Manually
 
-- ### Start backend:
-
 ```bash
-cd apps/llm-backend
-uvicorn main:app --reload --port 8000
-```
-
-- ### Start frontend:
-
-```bash
-cd apps/web
-yarn install
-yarn dev or yarn run dev
+yarn setup
+yarn dev
 ```
 
 ## ⚙️ Environment Setup
