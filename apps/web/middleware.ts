@@ -6,15 +6,16 @@ export async function middleware(req: NextRequest) {
   const pathname = url.pathname;
 
   const isAuthPage = pathname === '/auth';
-  const isProtectedRoute = pathname.startsWith('/dashboard') || pathname.startsWith('/main');
+  const isProtectedRoute =
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/main') ||
+    pathname.startsWith('/profile');
 
-  // Redirect unauthenticated users trying to access protected routes
   if (!token && isProtectedRoute) {
     url.pathname = '/auth';
     return NextResponse.redirect(url);
   }
 
-  // Redirect authenticated users away from the auth page
   if (token && isAuthPage) {
     url.pathname = '/dashboard';
     return NextResponse.redirect(url);
@@ -24,5 +25,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/main/:path*', '/auth'],
+  matcher: ['/dashboard/:path*', '/profile/:path*', '/main/:path*', '/auth'],
 };
