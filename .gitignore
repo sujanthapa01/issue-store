@@ -71,3 +71,13 @@ Thumbs.db
 coverage/
 *.lcov
 .nyc_output/
+
+#-------------
+# yarn
+#-------------
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Keep cache (Zero-Install)
+!.yarn/cache
