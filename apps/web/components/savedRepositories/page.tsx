@@ -69,7 +69,7 @@ const SavedRepositoriesPopup = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div className="w-48 h-48 border-2 border-dashed rounded-xl flex items-center justify-center text-center cursor-pointer hover:bg-gray-100 transition">
+        <div className="w-48 h-48 border-2 border-dashed rounded-xl flex items-center justify-center text-center cursor-pointer hover:bg-gray-100/20 transition">
           <span className="text-lg font-medium">📂 Show Saved Repositories</span>
         </div>
       </DialogTrigger>

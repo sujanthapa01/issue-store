@@ -32,18 +32,18 @@ export default function RepoCard({ repo }: { repo: any }) {
 
   return (
     <div
-      className={`mb-8 rounded-xl border p-6 shadow-sm transition hover:shadow-md ${selectedStyle.bg} ${selectedStyle.border}`}
+      className={`mb-8 rounded-xl border p-6 min-[433px]:p-6 shadow-sm transition hover:shadow-md ${selectedStyle.bg} ${selectedStyle.border}`}
     >
       {/* Header */}
-      <div className="flex items-start justify-between gap-4 mb-4">
-        <div className="flex items-center gap-4">
+      <div className="flex min-[504px]:flex-row flex-col-reverse items-start justify-between  min-[433px]:gap-4 mb-4">
+        <div className="flex flex-col min-[433px]:flex-row  min-[433px]:items-center gap-4">
           <img
             src={repo.avatarUrl || repo.user?.avatar || '/default-avatar.png'}
             alt={`${repo.user?.username || repo.owner}'s avatar`}
-            className="w-12 h-12 rounded-full border"
+            className="min-[433px]:w-12 w-full h-full  min-[433px]:h-12 rounded-full border"
           />
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">{repo.fullName}</h2>
+            <h2 className="min-[369px]:text-xl text-[17px] font-semibold text-gray-900">{repo.fullName}</h2>
             <p className="text-sm text-gray-600">@{repo.user?.username || repo.owner}</p>
           </div>
         </div>
@@ -60,7 +60,7 @@ export default function RepoCard({ repo }: { repo: any }) {
       <p className="text-sm text-gray-700 mb-4">{repo.description || 'No description provided.'}</p>
 
       {/* Meta info */}
-      <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-6 items-center">
+      <div className="flex flex-wrap gap-4 text-[11px] min-[433px]:text-sm text-gray-600 mb-6 items-center">
         <span className={`${selectedStyle.button} py-1 px-2 rounded-lg border-2`}>
           🔗{' '}
           <a href={repo.url} target="_blank" rel="noopener noreferrer" className="hover:underline">

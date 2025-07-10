@@ -55,21 +55,21 @@ const Page = () => {
         style={{ backgroundImage: "url('/stacked-peaks-haikei.svg')" }}
       />
 
-      <div className="mt-14 px-10 py-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl flex flex-col items-center gap-6 max-w-md w-[90%]">
+      <div className="mt-14 px-10 py-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl flex flex-col items-center gap-3 min-[433px]:gap-6 max-w-md w-[90%]">
         <img
           src={avatar_url || undefined}
           alt="avatar"
           className="h-[200px] w-[200px] rounded-xl border border-white/30 object-cover"
         />
         <p className="text-3xl font-bold text-white">{username}</p>
-        <p className="text-white/80">Email - {email}</p>
+        <p className="text-white/80 min-[433px]:text-sm text-xs">Email - {email}</p>
 
-        <section className="mt-6 flex gap-4 flex-wrap justify-center">
+        <section className="mt-6 flex  gap-4 md:flex-nowrap flex-wrap justify-center">
           <RepositoryPopup username={username} />
           <SavedRepositoriesPopup />
         </section>
 
-        <button onClick={() => router.push('/')} className="cursor-pointer">{`< back`}</button>
+        <button onClick={() => router.push('/')} className="cursor-pointer text-white">{`< back`}</button>
       </div>
     </div>
   );

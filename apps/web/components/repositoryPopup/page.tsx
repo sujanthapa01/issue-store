@@ -143,13 +143,13 @@ const AddRepositoryPopup: React.FC<Props> = ({ username }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div className="w-48 h-48 border-2 border-dashed rounded-xl flex items-center justify-center text-center cursor-pointer hover:bg-gray-100 transition">
+        <div className="w-48 h-48 border-2 border-dashed rounded-xl flex items-center justify-center text-center cursor-pointer hover:bg-gray-100/20 transition">
           <span className="text-lg font-medium">➕ Add Repository</span>
         </div>
       </DialogTrigger>
 
       <DialogContent
-        className="max-h-screen overflow-y-auto max-w-2xl"
+        className="max-h-screen overflow-y-auto md:max-w-2xl"
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
@@ -168,7 +168,7 @@ const AddRepositoryPopup: React.FC<Props> = ({ username }) => {
         <button
           onClick={handleFetchRepository}
           disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
         >
           {loading ? 'Checking...' : 'Check Repository'}
         </button>
